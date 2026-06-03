@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zyte</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0f1b3d;
+      --blue:    #1b2a6b;
+      --purple:  #7b2fb5;
+      --magenta: #c42b8a;
+      --pink:    #e8357a;
+      --coral:   #f0604a;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      overflow: hidden;
+      color: #fff;
+    }
+
+    /* Animated background */
+    .bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 100% 0%,   #7b2fb530 0%, transparent 55%),
+        radial-gradient(ellipse 50% 60% at 0%   100%,  #c42b8a22 0%, transparent 55%),
+        radial-gradient(ellipse 40% 40% at 50%  50%,   #1b2a6b44 0%, transparent 60%),
+        var(--navy);
+      animation: bgpulse 10s ease-in-out infinite alternate;
+    }
+    @keyframes bgpulse {
+      from { filter: brightness(1); }
+      to   { filter: brightness(1.08) hue-rotate(5deg); }
+    }
+
+    /* Dot grid */
+    .dots {
+      position: fixed; inset: 0; z-index: 1;
+      background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* Floating code snippet decoration */
+    .code-deco {
+      position: fixed; top: 12%; right: 5%; z-index: 2;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px; line-height: 1.8;
+      color: rgba(255,255,255,0.08);
+      pointer-events: none;
+      animation: fadeUp 1s 0.8s ease both;
+    }
+
+    .content {
+      position: relative; z-index: 3;
+      display: flex; flex-direction: column;
+      justify-content: center;
+      height: 100vh;
+      padding: 0 9%;
+    }
+
+    /* Pill badge */
+    .badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      padding: 5px 13px;
+      margin-bottom: 36px;
+      width: fit-content;
+      animation: fadeUp 0.5s ease both;
+    }
+    .badge-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--coral));
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .badge span {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.07em;
+      text-transform: uppercase; color: rgba(255,255,255,0.55);
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:0.5; transform:scale(0.75); }
+    }
+
+    /* Headline */
+    h1 {
+      font-size: clamp(30px, 4.5vw, 50px);
+      font-weight: 600; line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+    h1 .gradient {
+      background: linear-gradient(90deg, var(--purple), var(--pink), var(--coral));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sub {
+      font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.5);
+      line-height: 1.6; max-width: 320px;
+      margin-bottom: 40px;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+
+    /* Feature pills */
+    .features {
+      display: flex; flex-direction: column; gap: 12px;
+      margin-bottom: 44px;
+      animation: fadeUp 0.5s 0.3s ease both;
+    }
+    .feature {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .feature-icon {
+      width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+    .feature-icon svg { width: 15px; height: 15px; }
+    .feature-text { font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.65); }
+    .feature-text strong { color: rgba(255,255,255,0.9); font-weight: 500; }
+
+    /* Stats */
+    .stats {
+      display: flex; gap: 28px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      animation: fadeUp 0.5s 0.4s ease both;
+    }
+    .stat { display: flex; flex-direction: column; gap: 3px; }
+    .stat-num {
+      font-size: 26px; font-weight: 600; line-height: 1;
+      background: linear-gradient(90deg, var(--purple), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.09em;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+    }
+
+    /* Bottom */
+    .bottom {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 4;
+      padding: 16px 9%;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      animation: fadeUp 0.5s 0.5s ease both;
+    }
+    .bottom-left {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.2);
+    }
+    .bottom-right {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; color: rgba(255,255,255,0.2);
+    }
+    .sf-icon { width: 14px; height: 14px; opacity: 0.3; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+  <div class="dots"></div>
+
+  <div class="code-deco">
+    import { ZyteAPI } from 'zyte-api'<br>
+    const client = new ZyteAPI({<br>
+    &nbsp;&nbsp;apiKey: process.env.ZYTE_KEY<br>
+    })<br>
+    const data = await client.extract({<br>
+    &nbsp;&nbsp;url: targetUrl,<br>
+    &nbsp;&nbsp;productList: true<br>
+    })
+  </div>
+
+  <div class="content">
+
+    <div class="badge">
+      <div class="badge-dot"></div>
+      <span>AI-Powered Web Scraping</span>
+    </div>
+
+    <h1>Access the web's data.<br><span class="gradient">Clean, ready,<br>at scale.</span></h1>
+
+    <p class="sub">Your Salesforce environment powered by Zyte — the all-in-one platform for web data extraction.</p>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.8" stroke-linecap="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="feature-text"><strong>Zyte API</strong> — Unblock, render & extract any website</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+          </svg>
+        </div>
+        <div class="feature-text"><strong>AI Extraction</strong> — Structured data without custom parsers</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.8" stroke-linecap="round">
+            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <div class="feature-text"><strong>Built-in compliance</strong> — Legal & ethical by design</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">15+</div>
+        <div class="stat-label">Years expertise</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">5M+</div>
+        <div class="stat-label">URLs / day</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">99.9%</div>
+        <div class="stat-label">Uptime SLA</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom">
+    <span class="bottom-left">Zyte · Salesforce Platform</span>
+    <span class="bottom-right">
+      <svg class="sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M10.5 5.5C11.5 3.5 13.5 2 16 2c3.31 0 6 2.69 6 6 0 .34-.03.67-.08 1C23.22 9.7 24 10.75 24 12c0 1.66-1.34 3-3 3H5c-2.21 0-4-1.79-4-4 0-1.97 1.43-3.61 3.32-3.93" stroke-linecap="round"/>
+      </svg>
+      Powered by Salesforce
+    </span>
+  </div>
+
+</body>
+</html>
